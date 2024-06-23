@@ -3,12 +3,38 @@ import socket
 
 app = Flask(__name__)
 
-# HTML template with buttons
+# HTML template with buttons and dark theme
 html_template = """
 <!DOCTYPE html>
 <html>
 <head>
     <title>GPIO Control</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        button {
+            background-color: #1f1f1f;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #333333;
+        }
+    </style>
 </head>
 <body>
     <h1>GPIO Control</h1>
@@ -38,4 +64,3 @@ def send_command(command):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
