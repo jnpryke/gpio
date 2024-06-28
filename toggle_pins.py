@@ -41,17 +41,18 @@ def set_default_state(lines):
 def set_gpio_state(pin_states, lines):
     line_1, line_2, line_3, lineChip2_1, lineChip2_2, lineChip2_3 = lines
     try:
+        line_1.set_value(0)
         # Set the states of pins 5, 4, and 9
-        line_1.set_value(1 if pin_states['pin1'] else 0)
-        line_2.set_value(1 if pin_states['pin2'] else 0)
-        line_3.set_value(1 if pin_states['pin3'] else 0)
-        print(f"Set enable pins: pin5={'HIGH' if pin_states['pin1'] else 'LOW'}, pin4={'HIGH' if pin_states['pin2'] else 'LOW'}, pin9={'HIGH' if pin_states['pin3'] else 'LOW'}")
+        # line_1.set_value(1 if pin_states['pin1'] else 0)
+        # line_2.set_value(1 if pin_states['pin2'] else 0)
+        # line_3.set_value(1 if pin_states['pin3'] else 0)
+        # print(f"Set enable pins: pin5={'HIGH' if pin_states['pin1'] else 'LOW'}, pin4={'HIGH' if pin_states['pin2'] else 'LOW'}, pin9={'HIGH' if pin_states['pin3'] else 'LOW'}")
         
-        # Set the states of pins 91, 92, and 93 based on binary values
-        lineChip2_1.set_value(1 if pin_states['bin0'] else 0)
-        lineChip2_2.set_value(1 if pin_states['bin1'] else 0)
-        lineChip2_3.set_value(1 if pin_states['bin2'] else 0)
-        print(f"Set input pins: pin91={'HIGH' if pin_states['bin0'] else 'LOW'}, pin92={'HIGH' if pin_states['bin1'] else 'LOW'}, pin93={'HIGH' if pin_states['bin2'] else 'LOW'}")
+        # # Set the states of pins 91, 92, and 93 based on binary values
+        # lineChip2_1.set_value(1 if pin_states['bin0'] else 0)
+        # lineChip2_2.set_value(1 if pin_states['bin1'] else 0)
+        # lineChip2_3.set_value(1 if pin_states['bin2'] else 0)
+        # print(f"Set input pins: pin91={'HIGH' if pin_states['bin0'] else 'LOW'}, pin92={'HIGH' if pin_states['bin1'] else 'LOW'}, pin93={'HIGH' if pin_states['bin2'] else 'LOW'}")
     except Exception as e:
         print(f"Error setting GPIO state: {e}")
 
