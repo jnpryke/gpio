@@ -53,37 +53,30 @@ html_template = """
 
 # Mappings for each pin
 pin_5_map = {
-    "0": "1",
-    "1": "2",
-    "2": "10",
-    "3": "11",
-    "4": "100",
-    "5": "101",
-    "6": "110",
-    "7": "111",
-    "8": "END"
+    "1": "000",
+    "2": "001",
+    "3": "010",
+    "4": "011",
+    "7": "100",
+    "8": "101",
+    "9": "110",
+    "END": "111"
 }
 
 pin_4_map = {
-    "0": "NEXT",
-    "1": "SLEEP",
-    "2": "POWER",
-    "3": "BLUETOOTH",
-    "4": "F10",
-    "5": "0",
-    "6": "PRINT SCREEN",
-    "7": "F5"
+    "NEXT": "000",
+    "SLEEP": "001",
+    "POWER": "010",
+    "BLUETOOTH": "011",
+    "F10": "100",
+    "0": "101",
+    "PRINT SCREEN": "110",
+    "F5": "111"
 }
 
 pin_9_map = {
-    "0": "WINDOWS KEY",
-    "1": "HANGUL",
-    "2": "",
-    "3": "",
-    "4": "",
-    "5": "",
-    "6": "",
-    "7": ""
+    "WINDOWS KEY": "000",
+    "HANGUL": "001"
 }
 
 def send_command(pin_states):
@@ -98,7 +91,7 @@ def process_sequence(sequence):
     for char in sequence:
         print(f"Processing character: {char}")
         if char in pin_5_map:
-            binary_input = format(int(char), '03b')
+            binary_input = pin_5_map[char]
             pin_states = {
                 'pin1': True, 'pin2': False, 'pin3': False,
                 'bin0': binary_input[2] == '1',
@@ -108,7 +101,7 @@ def process_sequence(sequence):
             send_command(pin_states)
             time.sleep(0.5)
         elif char in pin_4_map:
-            binary_input = format(int(char), '03b')
+            binary_input = pin_4_map[char]
             pin_states = {
                 'pin1': False, 'pin2': True, 'pin3': False,
                 'bin0': binary_input[2] == '1',
@@ -118,7 +111,7 @@ def process_sequence(sequence):
             send_command(pin_states)
             time.sleep(0.5)
         elif char in pin_9_map:
-            binary_input = format(int(char), '03b')
+            binary_input = pin_9_map[char]
             pin_states = {
                 'pin1': False, 'pin2': False, 'pin3': True,
                 'bin0': binary_input[2] == '1',
