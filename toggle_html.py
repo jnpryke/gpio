@@ -99,7 +99,7 @@ def process_sequence(sequence):
                 'bin2': binary_input[0] == '1'
             }
             send_command(pin_states)
-            time.sleep(0.5)
+            time.sleep(0.2)
         elif char in pin_4_map:
             binary_input = pin_4_map[char]
             pin_states = {
@@ -109,7 +109,7 @@ def process_sequence(sequence):
                 'bin2': binary_input[0] == '1'
             }
             send_command(pin_states)
-            time.sleep(0.5)
+            time.sleep(0.2)
         elif char in pin_9_map:
             binary_input = pin_9_map[char]
             pin_states = {
@@ -119,7 +119,7 @@ def process_sequence(sequence):
                 'bin2': binary_input[0] == '1'
             }
             send_command(pin_states)
-            time.sleep(0.5)
+            time.sleep(0.2)
 
 @app.route('/')
 def index():

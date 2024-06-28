@@ -78,9 +78,9 @@ def main():
             conn.close()
             
             # Wait half a second before restoring default state
-            time.sleep(0.5)
+            time.sleep(0.2)
             set_default_state(lines)
-            time.sleep(0.5)
+            time.sleep(0.2)
         except Exception as e:
             print(f"Error handling connection: {e}")
 
