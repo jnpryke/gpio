@@ -3,7 +3,7 @@ import socket
 
 app = Flask(__name__)
 
-# HTML template with toggles for each GPIO pin and a submit button
+# HTML template with updated functionality and better presentation
 html_template = """
 <!DOCTYPE html>
 <html>
@@ -18,16 +18,23 @@ html_template = """
         h1 {
             text-align: center;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ffffff;
+            border-radius: 10px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 10px;
         }
         .toggle {
             display: flex;
             align-items: center;
             gap: 10px;
+            justify-content: center;
+            margin: 10px 0;
         }
         button {
             background-color: #1f1f1f;
@@ -40,36 +47,76 @@ html_template = """
         button:hover {
             background-color: #333333;
         }
+        .binary-display {
+            text-align: center;
+            font-size: 20px;
+            margin: 10px 0;
+        }
     </style>
+    <script>
+        function togglePin(id) {
+            const pins = ['pin1', 'pin2', 'pin3'];
+            const uncheckedPins = pins.filter(pin => !document.getElementById(pin).checked);
+            if (uncheckedPins.length > 1) {
+                document.getElementById(id).checked = true;
+            }
+        }
+
+        function updateBinaryDisplay() {
+            const bin0 = document.getElementById('bin0').checked ? 1 : 0;
+            const bin1 = document.getElementById('bin1').checked ? 1 : 0;
+            const bin2 = document.getElementById('bin2').checked ? 1 : 0;
+            const binaryValue = (bin2 << 2) | (bin1 << 1) | bin0;
+            document.getElementById('binaryValue').textContent = `Binary Value: ${binaryValue} ( ${bin2}${bin1}${bin0} )`;
+        }
+
+        function setDefault() {
+            document.getElementById('pin1').checked = true;
+            document.getElementById('pin2').checked = true;
+            document.getElementById('pin3').checked = true;
+            document.getElementById('bin0').checked = false;
+            document.getElementById('bin1').checked = false;
+            document.getElementById('bin2').checked = false;
+            updateBinaryDisplay();
+        }
+    </script>
 </head>
-<body>
+<body onload="setDefault()">
     <h1>GPIO Control</h1>
     <form method="POST" action="/control">
-        <div class="toggle">
-            <label for="pin1">Pin 5:</label>
-            <input type="checkbox" id="pin1" name="pin1">
+        <div class="section">
+            <div class="section-title">Enabled Pins</div>
+            <div class="toggle">
+                <label for="pin1">Pin 5:</label>
+                <input type="checkbox" id="pin1" name="pin1" onchange="togglePin('pin1')" checked>
+            </div>
+            <div class="toggle">
+                <label for="pin2">Pin 4:</label>
+                <input type="checkbox" id="pin2" name="pin2" onchange="togglePin('pin2')" checked>
+            </div>
+            <div class="toggle">
+                <label for="pin3">Pin 9:</label>
+                <input type="checkbox" id="pin3" name="pin3" onchange="togglePin('pin3')" checked>
+            </div>
         </div>
-        <div class="toggle">
-            <label for="pin2">Pin 4:</label>
-            <input type="checkbox" id="pin2" name="pin2">
-        </div>
-        <div class="toggle">
-            <label for="pin3">Pin 9:</label>
-            <input type="checkbox" id="pin3" name="pin3">
-        </div>
-        <div class="toggle">
-            <label for="pin4">Pin 91:</label>
-            <input type="checkbox" id="pin4" name="pin4">
-        </div>
-        <div class="toggle">
-            <label for="pin5">Pin 92:</label>
-            <input type="checkbox" id="pin5" name="pin5">
-        </div>
-        <div class="toggle">
-            <label for="pin6">Pin 93:</label>
-            <input type="checkbox" id="pin6" name="pin6">
+        <div class="section">
+            <div class="section-title">Input Selector Pins</div>
+            <div class="toggle">
+                <label for="bin0">Pin 91 (Lowest Bit):</label>
+                <input type="checkbox" id="bin0" name="bin0" onchange="updateBinaryDisplay()">
+            </div>
+            <div class="toggle">
+                <label for="bin1">Pin 92 (Middle Bit):</label>
+                <input type="checkbox" id="bin1" name="bin1" onchange="updateBinaryDisplay()">
+            </div>
+            <div class="toggle">
+                <label for="bin2">Pin 93 (Highest Bit):</label>
+                <input type="checkbox" id="bin2" name="bin2" onchange="updateBinaryDisplay()">
+            </div>
+            <div class="binary-display" id="binaryValue">Binary Value: 0 ( 000 )</div>
         </div>
         <button type="submit">Apply</button>
+        <button type="button" onclick="setDefault()">Default</button>
     </form>
 </body>
 </html>
@@ -85,9 +132,9 @@ def control():
         'pin1': request.form.get('pin1') == 'on',
         'pin2': request.form.get('pin2') == 'on',
         'pin3': request.form.get('pin3') == 'on',
-        'pin4': request.form.get('pin4') == 'on',
-        'pin5': request.form.get('pin5') == 'on',
-        'pin6': request.form.get('pin6') == 'on'
+        'bin0': request.form.get('bin0') == 'on',
+        'bin1': request.form.get('bin1') == 'on',
+        'bin2': request.form.get('bin2') == 'on'
     }
     send_command(pin_states)
     return render_template_string(html_template)
