@@ -1,6 +1,6 @@
 from flask import Flask, render_template_string, request
-import time
 import socket
+import time
 
 app = Flask(__name__)
 
@@ -51,38 +51,39 @@ html_template = """
 </html>
 """
 
-# Mappings
+# Mappings for each pin
 pin_5_map = {
     "0": "1",
     "1": "2",
-    "10": "3",
-    "11": "4",
-    "100": "7",
-    "101": "8",
-    "110": "9",
-    "111": "END"
+    "2": "10",
+    "3": "11",
+    "4": "100",
+    "5": "101",
+    "6": "110",
+    "7": "111",
+    "8": "END"
 }
 
 pin_4_map = {
     "0": "NEXT",
     "1": "SLEEP",
-    "10": "POWER",
-    "11": "BLUETOOTH",
-    "100": "F10",
-    "101": "0",
-    "110": "PRINT SCREEN",
-    "111": "F5"
+    "2": "POWER",
+    "3": "BLUETOOTH",
+    "4": "F10",
+    "5": "0",
+    "6": "PRINT SCREEN",
+    "7": "F5"
 }
 
 pin_9_map = {
     "0": "WINDOWS KEY",
     "1": "HANGUL",
-    "10": "",
-    "11": "",
-    "100": "",
-    "101": "",
-    "110": "",
-    "111": ""
+    "2": "",
+    "3": "",
+    "4": "",
+    "5": "",
+    "6": "",
+    "7": ""
 }
 
 def send_command(pin_states):
@@ -105,7 +106,7 @@ def process_sequence(sequence):
                 'bin2': binary_input[0] == '1'
             }
             send_command(pin_states)
-            time.sleep(3)
+            time.sleep(0.5)
         elif char in pin_4_map:
             binary_input = format(int(char), '03b')
             pin_states = {
@@ -115,7 +116,7 @@ def process_sequence(sequence):
                 'bin2': binary_input[0] == '1'
             }
             send_command(pin_states)
-            time.sleep(3)
+            time.sleep(0.5)
         elif char in pin_9_map:
             binary_input = format(int(char), '03b')
             pin_states = {
@@ -125,7 +126,7 @@ def process_sequence(sequence):
                 'bin2': binary_input[0] == '1'
             }
             send_command(pin_states)
-            time.sleep(3)
+            time.sleep(0.5)
 
 @app.route('/')
 def index():
