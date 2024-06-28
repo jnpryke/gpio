@@ -61,6 +61,6 @@ while True:
     conn.close()
 
     # Wait half a second before restoring default state
-    time.sleep(0.5)
+    time.sleep(3)
     set_default_state()
-    time.sleep(0.5)
+    time.sleep(3)
