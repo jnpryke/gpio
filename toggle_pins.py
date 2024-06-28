@@ -34,7 +34,7 @@ def set_default_state(lines):
         lineChip2_1.set_value(0)
         lineChip2_2.set_value(0)
         lineChip2_3.set_value(0)
-        print("Restored default state: all enable pins high, input pins low")
+        print("Restored default state: all enable pins high (false), input pins low (true)")
     except Exception as e:
         print(f"Error setting default state: {e}")
 
@@ -42,10 +42,10 @@ def set_gpio_state(pin_states, lines):
     line_1, line_2, line_3, lineChip2_1, lineChip2_2, lineChip2_3 = lines
     try:
         # Set the states of pins 5, 4, and 9
-        line_1.set_value(1 if pin_states.get('pin1', False) else 0)
-        line_2.set_value(1 if pin_states.get('pin2', False) else 0)
-        line_3.set_value(1 if pin_states.get('pin3', False) else 0)
-        print(f"Set enable pins: pin5={'HIGH' if pin_states.get('pin1', False) else 'LOW'}, pin4={'HIGH' if pin_states.get('pin2', False) else 'LOW'}, pin9={'HIGH' if pin_states.get('pin3', False) else 'LOW'}")
+        line_1.set_value(0 if pin_states.get('pin1', False) else 1)
+        line_2.set_value(0 if pin_states.get('pin2', False) else 1)
+        line_3.set_value(0 if pin_states.get('pin3', False) else 1)
+        print(f"Set enable pins: pin5={'LOW' if pin_states.get('pin1', False) else 'HIGH'}, pin4={'LOW' if pin_states.get('pin2', False) else 'HIGH'}, pin9={'LOW' if pin_states.get('pin3', False) else 'HIGH'}")
         
         # Set the states of pins 91, 92, and 93 based on binary values
         lineChip2_1.set_value(1 if pin_states.get('bin0', False) else 0)
