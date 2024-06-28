@@ -1,9 +1,9 @@
 from flask import Flask, render_template_string, request
+import time
 import socket
 
 app = Flask(__name__)
 
-# HTML template with updated functionality and better presentation
 html_template = """
 <!DOCTYPE html>
 <html>
@@ -18,23 +18,14 @@ html_template = """
         h1 {
             text-align: center;
         }
-        .section {
-            margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #ffffff;
-            border-radius: 10px;
-        }
-        .section-title {
+        form {
             text-align: center;
-            font-size: 24px;
-            margin-bottom: 10px;
+            margin-top: 50px;
         }
-        .toggle {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: center;
-            margin: 10px 0;
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
         }
         button {
             background-color: #1f1f1f;
@@ -47,104 +38,107 @@ html_template = """
         button:hover {
             background-color: #333333;
         }
-        .binary-display {
-            text-align: center;
-            font-size: 20px;
-            margin: 10px 0;
-        }
     </style>
-    <script>
-        function togglePin(id) {
-            const pins = ['pin1', 'pin2', 'pin3'];
-            const uncheckedPins = pins.filter(pin => !document.getElementById(pin).checked);
-            if (uncheckedPins.length > 1) {
-                document.getElementById(id).checked = true;
-            }
-        }
-
-        function updateBinaryDisplay() {
-            const bin0 = document.getElementById('bin0').checked ? 1 : 0;
-            const bin1 = document.getElementById('bin1').checked ? 1 : 0;
-            const bin2 = document.getElementById('bin2').checked ? 1 : 0;
-            const binaryValue = (bin2 << 2) | (bin1 << 1) | bin0;
-            document.getElementById('binaryValue').textContent = `Binary Value: ${binaryValue} ( ${bin2}${bin1}${bin0} )`;
-        }
-
-        function setDefault() {
-            document.getElementById('pin1').checked = true;
-            document.getElementById('pin2').checked = true;
-            document.getElementById('pin3').checked = true;
-            document.getElementById('bin0').checked = false;
-            document.getElementById('bin1').checked = false;
-            document.getElementById('bin2').checked = false;
-            updateBinaryDisplay();
-        }
-    </script>
 </head>
-<body onload="setDefault()">
-    <h1>GPIO Control</h1>
+<body>
+    <h1>GPIO Character Sequence Control</h1>
     <form method="POST" action="/control">
-        <div class="section">
-            <div class="section-title">Enabled Pins</div>
-            <div class="toggle">
-                <label for="pin1">Pin 5:</label>
-                <input type="checkbox" id="pin1" name="pin1" onchange="togglePin('pin1')" checked>
-            </div>
-            <div class="toggle">
-                <label for="pin2">Pin 4:</label>
-                <input type="checkbox" id="pin2" name="pin2" onchange="togglePin('pin2')" checked>
-            </div>
-            <div class="toggle">
-                <label for="pin3">Pin 9:</label>
-                <input type="checkbox" id="pin3" name="pin3" onchange="togglePin('pin3')" checked>
-            </div>
-        </div>
-        <div class="section">
-            <div class="section-title">Input Selector Pins</div>
-            <div class="toggle">
-                <label for="bin0">Pin 91 (Lowest Bit):</label>
-                <input type="checkbox" id="bin0" name="bin0" onchange="updateBinaryDisplay()">
-            </div>
-            <div class="toggle">
-                <label for="bin1">Pin 92 (Middle Bit):</label>
-                <input type="checkbox" id="bin1" name="bin1" onchange="updateBinaryDisplay()">
-            </div>
-            <div class="toggle">
-                <label for="bin2">Pin 93 (Highest Bit):</label>
-                <input type="checkbox" id="bin2" name="bin2" onchange="updateBinaryDisplay()">
-            </div>
-            <div class="binary-display" id="binaryValue">Binary Value: 0 ( 000 )</div>
-        </div>
-        <button type="submit">Apply</button>
-        <button type="button" onclick="setDefault()">Default</button>
+        <input type="text" name="sequence" placeholder="Enter number sequence" required>
+        <br>
+        <button type="submit">Submit</button>
     </form>
 </body>
 </html>
 """
 
-@app.route('/')
-def index():
-    return render_template_string(html_template)
+# Mappings
+pin_5_map = {
+    "0": "1",
+    "1": "2",
+    "10": "3",
+    "11": "4",
+    "100": "7",
+    "101": "8",
+    "110": "9",
+    "111": "END"
+}
 
-@app.route('/control', methods=['POST'])
-def control():
-    pin_states = {
-        'pin1': request.form.get('pin1') == 'on',
-        'pin2': request.form.get('pin2') == 'on',
-        'pin3': request.form.get('pin3') == 'on',
-        'bin0': request.form.get('bin0') == 'on',
-        'bin1': request.form.get('bin1') == 'on',
-        'bin2': request.form.get('bin2') == 'on'
-    }
-    send_command(pin_states)
-    return render_template_string(html_template)
+pin_4_map = {
+    "0": "NEXT",
+    "1": "SLEEP",
+    "10": "POWER",
+    "11": "BLUETOOTH",
+    "100": "F10",
+    "101": "0",
+    "110": "PRINT SCREEN",
+    "111": "F5"
+}
+
+pin_9_map = {
+    "0": "WINDOWS KEY",
+    "1": "HANGUL",
+    "10": "",
+    "11": "",
+    "100": "",
+    "101": "",
+    "110": "",
+    "111": ""
+}
 
 def send_command(pin_states):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(('localhost', 65432))
     client_socket.send(str(pin_states).encode())
     client_socket.close()
+    print(f"Sent command: {pin_states}")
+
+def process_sequence(sequence):
+    print(f"Processing sequence: {sequence}")
+    for char in sequence:
+        print(f"Processing character: {char}")
+        if char in pin_5_map:
+            binary_input = format(int(char), '03b')
+            pin_states = {
+                'pin1': True, 'pin2': False, 'pin3': False,
+                'bin0': binary_input[2] == '1',
+                'bin1': binary_input[1] == '1',
+                'bin2': binary_input[0] == '1'
+            }
+            send_command(pin_states)
+            time.sleep(0.5)
+        elif char in pin_4_map:
+            binary_input = format(int(char), '03b')
+            pin_states = {
+                'pin1': False, 'pin2': True, 'pin3': False,
+                'bin0': binary_input[2] == '1',
+                'bin1': binary_input[1] == '1',
+                'bin2': binary_input[0] == '1'
+            }
+            send_command(pin_states)
+            time.sleep(0.5)
+        elif char in pin_9_map:
+            binary_input = format(int(char), '03b')
+            pin_states = {
+                'pin1': False, 'pin2': False, 'pin3': True,
+                'bin0': binary_input[2] == '1',
+                'bin1': binary_input[1] == '1',
+                'bin2': binary_input[0] == '1'
+            }
+            send_command(pin_states)
+            time.sleep(0.5)
+
+@app.route('/')
+def index():
+    print("Rendering index page")
+    return render_template_string(html_template)
+
+@app.route('/control', methods=['POST'])
+def control():
+    sequence = request.form['sequence']
+    print(f"Received sequence: {sequence}")
+    process_sequence(sequence)
+    return render_template_string(html_template)
 
 if __name__ == '__main__':
+    print("Starting GPIO Control Server")
     app.run(host='0.0.0.0', port=5000)
-
