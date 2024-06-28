@@ -47,16 +47,17 @@ while True:
     pin_states = ast.literal_eval(data)
     
     # Set the states of pins 5, 4, and 9
-    line_1.set_value(1 if pin_states['pin1'] else 0)
-    line_2.set_value(1 if pin_states['pin2'] else 0)
-    line_3.set_value(1 if pin_states['pin3'] else 0)
-    print(f"Set enable pins: pin5={'HIGH' if pin_states['pin1'] else 'LOW'}, pin4={'HIGH' if pin_states['pin2'] else 'LOW'}, pin9={'HIGH' if pin_states['pin3'] else 'LOW'}")
+    line_1.set_value(0)
+    # line_1.set_value(1 if pin_states['pin1'] else 0)
+    # line_2.set_value(1 if pin_states['pin2'] else 0)
+    # line_3.set_value(1 if pin_states['pin3'] else 0)
+    # print(f"Set enable pins: pin5={'HIGH' if pin_states['pin1'] else 'LOW'}, pin4={'HIGH' if pin_states['pin2'] else 'LOW'}, pin9={'HIGH' if pin_states['pin3'] else 'LOW'}")
     
-    # Set the states of pins 91, 92, and 93 based on binary values
-    lineChip2_1.set_value(1 if pin_states['bin0'] else 0)
-    lineChip2_2.set_value(1 if pin_states['bin1'] else 0)
-    lineChip2_3.set_value(1 if pin_states['bin2'] else 0)
-    print(f"Set input pins: pin91={'HIGH' if pin_states['bin0'] else 'LOW'}, pin92={'HIGH' if pin_states['bin1'] else 'LOW'}, pin93={'HIGH' if pin_states['bin2'] else 'LOW'}")
+    # # Set the states of pins 91, 92, and 93 based on binary values
+    # lineChip2_1.set_value(1 if pin_states['bin0'] else 0)
+    # lineChip2_2.set_value(1 if pin_states['bin1'] else 0)
+    # lineChip2_3.set_value(1 if pin_states['bin2'] else 0)
+    # print(f"Set input pins: pin91={'HIGH' if pin_states['bin0'] else 'LOW'}, pin92={'HIGH' if pin_states['bin1'] else 'LOW'}, pin93={'HIGH' if pin_states['bin2'] else 'LOW'}")
     
     conn.close()
 
