@@ -68,9 +68,11 @@ def main():
     while True:
         try:
             conn, addr = server_socket.accept()
+            print(f"Accepted connection from {addr}")
             data = conn.recv(1024).decode()
+            print(f"Received data: {data}")
             pin_states = ast.literal_eval(data)
-            print(f"Received data: {pin_states}")
+            print(f"Parsed pin states: {pin_states}")
             
             set_gpio_state(pin_states, lines)
             conn.close()
