@@ -52,26 +52,25 @@ html_template = """
 """
 
 # Mappings for each pin
-pin_5_map = {
-    "1": "000",
-    "2": "001",
-    "3": "010",
-    "4": "011",
-    "7": "100",
-    "8": "101",
-    "9": "110",
-    "END": "111"
+Row_0 = {
+    "q": "000",
+    "w": "001",
+    "e": "010",
+    "r": "011",
+    "u": "100",
+    "i": "101",
+    "o": "110",
+    "p": "111"
 }
 
-pin_4_map = {
-    "NEXT": "000",
-    "SLEEP": "001",
-    "POWER": "010",
-    "BLUETOOTH": "011",
-    "F10": "100",
-    "0": "101",
-    "PRINT SCREEN": "110",
-    "F5": "111"
+Row_1 = {
+    "t": "000",
+    "y": "001",
+    "]": "010",
+    "F7": "011",
+    "[": "100",
+    "BACKSPACE": "101",
+    "SHIFT_L": "110",
 }
 
 pin_9_map = {
@@ -90,8 +89,8 @@ def process_sequence(sequence):
     print(f"Processing sequence: {sequence}")
     for char in sequence:
         print(f"Processing character: {char}")
-        if char in pin_5_map:
-            binary_input = pin_5_map[char]
+        if char in Row_0:
+            binary_input = Row_0[char]
             pin_states = {
                 'pin1': True, 'pin2': False, 'pin3': False,
                 'bin0': binary_input[2] == '1',
@@ -100,8 +99,8 @@ def process_sequence(sequence):
             }
             send_command(pin_states)
             time.sleep(0.2)
-        elif char in pin_4_map:
-            binary_input = pin_4_map[char]
+        elif char in Row_1:
+            binary_input = Row_1[char]
             pin_states = {
                 'pin1': False, 'pin2': True, 'pin3': False,
                 'bin0': binary_input[2] == '1',
