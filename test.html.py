@@ -55,9 +55,9 @@ html_template = """
             xhr.open('POST', '/send_pins', true);
             xhr.onload = function () {
                 if (xhr.status === 200) {
-                    alert('Pin states set successfully!');
+                    console.log('Pin states set successfully!');
                 } else {
-                    alert('An error occurred while setting pin states.');
+                    console.log('An error occurred while setting pin states.');
                 }
             };
             xhr.send(formData);
