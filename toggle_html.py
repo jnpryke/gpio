@@ -80,16 +80,22 @@ Row_2_pin_0 = {
     "f": "011",
     "j": "100",
     "k": "101",
-    "l": "110",
-    # "Enter": "111"
 }
 
 Row_2_pin_1 = {
+    "l": "000",
+    ";": "001",
+    # "\": "010",
+    # "ENTER": "011",
+    # "SHIFT_L": "100",    
+}
+
+Row_3_pin_0 = {
     "g": "000",
     "h": "001",
     # "Up": "010",
     # "Space": "011",
-    # "'": "100",
+    "'": "100",
 }
 
 def send_command(pin_states):
@@ -106,7 +112,7 @@ def process_sequence(sequence):
         if char in Row_0_pin_0:
             binary_input = Row_0_pin_0[char]
             pin_states = {
-                'pin1': True, 'pin2': False, 'pin3': False, 'pin4': False
+                'pin1': True, 'pin2': False, 'pin3': False, 'pin4': False, 'pin5': False
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
@@ -116,7 +122,7 @@ def process_sequence(sequence):
         elif char in Row_1_pin_0:
             binary_input = Row_1_pin_0[char]
             pin_states = {
-                'pin1': False, 'pin2': True, 'pin3': False, 'pin4': False
+                'pin1': False, 'pin2': True, 'pin3': False, 'pin4': False, 'pin5': False
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
@@ -126,7 +132,7 @@ def process_sequence(sequence):
         elif char in Row_2_pin_0:
             binary_input = Row_2_pin_0[char]
             pin_states = {
-                'pin1': False, 'pin2': False, 'pin3': True, 'pin4': False
+                'pin1': False, 'pin2': False, 'pin3': True, 'pin4': False, 'pin5': False
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
@@ -136,7 +142,17 @@ def process_sequence(sequence):
         elif char in Row_2_pin_1:
             binary_input = Row_2_pin_1[char]
             pin_states = {
-                'pin1': False, 'pin2': False, 'pin3': False, 'pin4': True
+                'pin1': False, 'pin2': False, 'pin3': False, 'pin4': True, 'pin5': False
+                'bin0': binary_input[2] == '1',
+                'bin1': binary_input[1] == '1',
+                'bin2': binary_input[0] == '1'
+            }
+            send_command(pin_states)
+            time.sleep(0.2)
+        elif char in Row_3_pin_0:
+            binary_input = Row_2_pin_1[char]
+            pin_states = {
+                'pin1': False, 'pin2': False, 'pin3': False, 'pin4': False, 'pin5': True
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'

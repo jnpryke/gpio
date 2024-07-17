@@ -11,6 +11,7 @@ def setup_gpio():
     Row_1_pin_4 = chip.get_line(4)
     Row_2_pin_9 = chip.get_line(9)
     Row_2_pin_87 = chip2.get_line(87)
+    Row_2_pin_88 = chip2.get_line(88)
 
     input_0 = chip2.get_line(91)
     input_1 = chip2.get_line(92)
@@ -27,12 +28,13 @@ def setup_gpio():
     return Row_0_pin_5, Row_1_pin_4, Row_2_pin_9, Row_2_pin_87, input_0, input_1, input_2
 
 def set_default_state(lines):
-    Row_0_pin_5, Row_1_pin_4, Row_2_pin_9, Row_2_pin_87, input_0, input_1, input_2 = lines
+    Row_0_pin_5, Row_1_pin_4, Row_2_pin_9, Row_2_pin_87, Row_2_pin_88, input_0, input_1, input_2 = lines
     try:
         Row_0_pin_5.set_value(1)
         Row_1_pin_4.set_value(1)
         Row_2_pin_9.set_value(1)
         Row_2_pin_87.set_value(1)
+        Row_2_pin_88.set_value(1)
 
         input_0.set_value(0)
         input_1.set_value(0)
@@ -42,13 +44,14 @@ def set_default_state(lines):
         print(f"Error setting default state: {e}")
 
 def set_gpio_state(pin_states, lines):
-    Row_0_pin_5, Row_1_pin_4, Row_2_pin_9, Row_2_pin_87, input_0, input_1, input_2 = lines
+    Row_0_pin_5, Row_1_pin_4, Row_2_pin_9, Row_2_pin_87, Row_2_pin_88, input_0, input_1, input_2 = lines
     try:
         # Set the states of pins 5, 4, 9 and 87
         Row_0_pin_5.set_value(0 if pin_states.get('pin1', False) else 1)
         Row_1_pin_4.set_value(0 if pin_states.get('pin2', False) else 1)
         Row_2_pin_9.set_value(0 if pin_states.get('pin3', False) else 1)
         Row_2_pin_87.set_value(0 if pin_states.get('pin4', False) else 1)
+        Row_2_pin_88.set_value(0 if pin_states.get('pin5', False) else 1)
         print(f"Set enable pins: pin5={'LOW' if pin_states.get('pin1', False) else 'HIGH'}, pin4={'LOW' if pin_states.get('pin2', False) else 'HIGH'}, pin9={'LOW' if pin_states.get('pin3', False) else 'HIGH'}")
         
         # Set the states of pins 91, 92, and 93 based on binary values
