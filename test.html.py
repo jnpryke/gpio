@@ -93,7 +93,7 @@ html_template = """
 
 @app.route('/')
 def index():
-    pins = [5, 4, 9, 91, 92, 93, 87, 88]  # Including pins 87 and 88
+    pins = [91, 92, 93, 5, 4, 9, 87, 88]  # Including pins 87 and 88
     return render_template_string(html_template, pins=pins)
 
 @app.route('/send_pins', methods=['POST'])
