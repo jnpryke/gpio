@@ -88,6 +88,9 @@ html_template = """
                     document.getElementById('pin_' + pin).value = 'high';
                 }
             });
+
+            // Submit the form after setting default states
+            document.getElementById('pinForm').submit();
         }
 
         function sendPinStates() {
@@ -116,7 +119,7 @@ html_template = """
                 <th>State</th>
             </tr>
             <!-- Separate section for pins 91, 92, 93 -->
-            <tr><th colspan="2">Pins 91, 92, 93</th></tr>
+            <tr><th colspan="2">Input Pins</th></tr>
             {% for pin in pins if pin in [91, 92, 93] %}
             <tr>
                 <td>{{ pin }}</td>
@@ -129,7 +132,7 @@ html_template = """
             </tr>
             {% endfor %}
             <!-- Separate section for the rest of the pins -->
-            <tr><th colspan="2">Other Pins</th></tr>
+            <tr><th colspan="2">Enable Pins</th></tr>
             {% for pin in pins if pin not in [91, 92, 93] %}
             <tr>
                 <td>{{ pin }}</td>
