@@ -90,7 +90,7 @@ html_template = """
             });
 
             // Submit the form after setting default states
-            document.getElementById('pinForm').submit();
+            sendPinStates();
         }
 
         function sendPinStates() {
