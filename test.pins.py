@@ -15,6 +15,8 @@ def setup_gpio():
         91: chip2.get_line(91),
         92: chip2.get_line(92),
         93: chip2.get_line(93),
+        87: chip.get_line(87),
+        88: chip.get_line(88)
     }
 
     for pin in pins.values():

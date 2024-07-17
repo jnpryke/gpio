@@ -85,24 +85,24 @@ html_template = """
             </tr>
             {% endfor %}
         </table>
-        <input type="submit" value="Set Pins">
+        <input type="submit" value="Set Pin States">
     </form>
 </body>
 </html>
 """
 
-@app.route("/", methods=["GET", "POST"])
+@app.route('/')
 def index():
-    pins = [5, 4, 9, 91, 92, 93]  # Add the pins you want to control
+    pins = [5, 4, 9, 91, 92, 93, 87, 88]  # Including pins 87 and 88
     return render_template_string(html_template, pins=pins)
 
-@app.route("/send_pins", methods=["POST"])
+@app.route('/send_pins', methods=['POST'])
 def send_pins():
-    pins = [5, 4, 9, 91, 92, 93]  # Add the pins you want to control
     pin_states = {}
-    for pin in pins:
-        state = request.form[f"pin_{pin}"]
-        pin_states[pin] = state
+    for pin in request.form:
+        pin_number = int(pin.split('_')[1])
+        state = request.form[pin]
+        pin_states[pin_number] = state
     send_pin_states_to_gpio(pin_states)
     return jsonify({"status": "success"})
 
