@@ -52,7 +52,7 @@ html_template = """
 """
 
 # Mappings for each pin
-Row_0 = {
+Row_0_pin_0 = {
     "q": "000",
     "w": "001",
     "e": "010",
@@ -63,7 +63,7 @@ Row_0 = {
     "p": "111"
 }
 
-Row_1 = {
+Row_1_pin_0 = {
     "t": "000",
     "y": "001",
     "]": "010",
@@ -73,9 +73,23 @@ Row_1 = {
     "[": "110",
 }
 
-pin_9_map = {
-    "WINDOWS KEY": "000",
-    "HANGUL": "001"
+Row_2_pin_0 = {
+    "a": "000",
+    "s": "001",
+    "d": "010",
+    "f": "011",
+    "j": "100",
+    "k": "101",
+    "l": "110",
+    # "Enter": "111"
+}
+
+Row_2_pin_1 = {
+    "g": "000",
+    "h": "001",
+    # "Up": "010",
+    # "Space": "011",
+    # "'": "100",
 }
 
 def send_command(pin_states):
@@ -89,37 +103,46 @@ def process_sequence(sequence):
     print(f"Processing sequence: {sequence}")
     for char in sequence:
         print(f"Processing character: {char}")
-        if char in Row_0:
-            binary_input = Row_0[char]
+        if char in Row_0_pin_0:
+            binary_input = Row_0_pin_0[char]
             pin_states = {
-                'pin1': True, 'pin2': False, 'pin3': False,
+                'pin1': True, 'pin2': False, 'pin3': False, 'pin4': False
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
             }
             send_command(pin_states)
             time.sleep(0.2)
-        elif char in Row_1:
-            binary_input = Row_1[char]
+        elif char in Row_1_pin_0:
+            binary_input = Row_1_pin_0[char]
             pin_states = {
-                'pin1': False, 'pin2': True, 'pin3': False,
+                'pin1': False, 'pin2': True, 'pin3': False, 'pin4': False
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
             }
             send_command(pin_states)
             time.sleep(0.2)
-        elif char in pin_9_map:
-            binary_input = pin_9_map[char]
+        elif char in Row_2_pin_0:
+            binary_input = Row_2_pin_0[char]
             pin_states = {
-                'pin1': False, 'pin2': False, 'pin3': True,
+                'pin1': False, 'pin2': False, 'pin3': True, 'pin4': False
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
             }
             send_command(pin_states)
             time.sleep(0.2)
-
+        elif char in Row_2_pin_1:
+            binary_input = Row_2_pin_1[char]
+            pin_states = {
+                'pin1': False, 'pin2': False, 'pin3': False, 'pin4': True
+                'bin0': binary_input[2] == '1',
+                'bin1': binary_input[1] == '1',
+                'bin2': binary_input[0] == '1'
+            }
+            send_command(pin_states)
+            time.sleep(0.2)
 @app.route('/')
 def index():
     print("Rendering index page")
