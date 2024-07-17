@@ -30,9 +30,20 @@ html_template = """
             padding: 10px;
             border: 1px solid #ddd;
         }
-        select {
-            font-size: 16px;
-            padding: 5px;
+        .toggle-btn {
+            width: 60px;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+        }
+        .high {
+            background-color: red;
+        }
+        .low {
+            background-color: grey;
         }
         input[type="submit"], button {
             font-size: 20px;
@@ -48,6 +59,37 @@ html_template = """
         }
     </style>
     <script>
+        function togglePinState(button, pin) {
+            if (button.classList.contains('high')) {
+                button.classList.remove('high');
+                button.classList.add('low');
+                button.innerText = 'Low';
+                document.getElementById('pin_' + pin).value = 'low';
+            } else {
+                button.classList.remove('low');
+                button.classList.add('high');
+                button.innerText = 'High';
+                document.getElementById('pin_' + pin).value = 'high';
+            }
+        }
+
+        function setDefault() {
+            document.querySelectorAll('.toggle-btn').forEach(button => {
+                const pin = button.getAttribute('data-pin');
+                if ([91, 92, 93].includes(parseInt(pin))) {
+                    button.classList.remove('high');
+                    button.classList.add('low');
+                    button.innerText = 'Low';
+                    document.getElementById('pin_' + pin).value = 'low';
+                } else {
+                    button.classList.remove('low');
+                    button.classList.add('high');
+                    button.innerText = 'High';
+                    document.getElementById('pin_' + pin).value = 'high';
+                }
+            });
+        }
+
         function sendPinStates() {
             var form = document.getElementById('pinForm');
             var formData = new FormData(form);
@@ -73,19 +115,35 @@ html_template = """
                 <th>Pin</th>
                 <th>State</th>
             </tr>
-            {% for pin in pins %}
+            <!-- Separate section for pins 91, 92, 93 -->
+            <tr><th colspan="2">Pins 91, 92, 93</th></tr>
+            {% for pin in pins if pin in [91, 92, 93] %}
             <tr>
                 <td>{{ pin }}</td>
                 <td>
-                    <select name="pin_{{ pin }}">
-                        <option value="high" {% if pin not in [91, 92, 93] %}selected{% endif %}>High</option>
-                        <option value="low" {% if pin in [91, 92, 93] %}selected{% endif %}>Low</option>
-                    </select>
+                    <button type="button" class="toggle-btn {% if pin in [91, 92, 93] %}low{% else %}high{% endif %}" data-pin="{{ pin }}" onclick="togglePinState(this, {{ pin }})">
+                        {% if pin in [91, 92, 93] %}Low{% else %}High{% endif %}
+                    </button>
+                    <input type="hidden" id="pin_{{ pin }}" name="pin_{{ pin }}" value="{% if pin in [91, 92, 93] %}low{% else %}high{% endif %}">
+                </td>
+            </tr>
+            {% endfor %}
+            <!-- Separate section for the rest of the pins -->
+            <tr><th colspan="2">Other Pins</th></tr>
+            {% for pin in pins if pin not in [91, 92, 93] %}
+            <tr>
+                <td>{{ pin }}</td>
+                <td>
+                    <button type="button" class="toggle-btn {% if pin in [91, 92, 93] %}low{% else %}high{% endif %}" data-pin="{{ pin }}" onclick="togglePinState(this, {{ pin }})">
+                        {% if pin in [91, 92, 93] %}Low{% else %}High{% endif %}
+                    </button>
+                    <input type="hidden" id="pin_{{ pin }}" name="pin_{{ pin }}" value="{% if pin in [91, 92, 93] %}low{% else %}high{% endif %}">
                 </td>
             </tr>
             {% endfor %}
         </table>
         <input type="submit" value="Set Pin States">
+        <button type="button" onclick="setDefault()">Set Default</button>
     </form>
 </body>
 </html>
@@ -93,7 +151,7 @@ html_template = """
 
 @app.route('/')
 def index():
-    pins = [91, 92, 93, 5, 4, 9, 87, 88]  # Including pins 87 and 88
+    pins = [5, 4, 9, 91, 92, 93, 87, 88]  # Including pins 87 and 88
     return render_template_string(html_template, pins=pins)
 
 @app.route('/send_pins', methods=['POST'])
