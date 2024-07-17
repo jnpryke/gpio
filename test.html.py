@@ -71,6 +71,7 @@ html_template = """
                 button.innerText = 'High';
                 document.getElementById('pin_' + pin).value = 'high';
             }
+            updateBinaryDisplay();
         }
 
         function setDefault() {
@@ -88,7 +89,7 @@ html_template = """
                     document.getElementById('pin_' + pin).value = 'high';
                 }
             });
-
+            updateBinaryDisplay();
             // Submit the form after setting default states
             sendPinStates();
         }
@@ -108,6 +109,18 @@ html_template = """
             xhr.send(formData);
             return false;
         }
+
+        function updateBinaryDisplay() {
+            let binaryValue = 0;
+            if (document.getElementById('pin_91').value === 'high') binaryValue += 1;
+            if (document.getElementById('pin_92').value === 'high') binaryValue += 2;
+            if (document.getElementById('pin_93').value === 'high') binaryValue += 4;
+            document.getElementById('binaryDisplay').innerText = binaryValue.toString(2).padStart(3, '0');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            updateBinaryDisplay();
+        });
     </script>
 </head>
 <body>
@@ -131,6 +144,9 @@ html_template = """
                 </td>
             </tr>
             {% endfor %}
+            <tr>
+                <td colspan="2" style="text-align: center;">Binary Value: <span id="binaryDisplay">000</span></td>
+            </tr>
             <!-- Separate section for the rest of the pins -->
             <tr><th colspan="2">Enable Pins</th></tr>
             {% for pin in pins if pin not in [91, 92, 93] %}
