@@ -118,7 +118,7 @@ def process_sequence(sequence):
         if char in Row_0_pin_0:
             binary_input = Row_0_pin_0[char]
             pin_states = {
-                'pin1': True, 'pin2': False, 'pin3': False, 'pin4': False, 'pin5': False
+                'pin1': True, 'pin2': False, 'pin3': False, 'pin4': False, 'pin5': False,
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
@@ -128,7 +128,7 @@ def process_sequence(sequence):
         elif char in Row_1_pin_0:
             binary_input = Row_1_pin_0[char]
             pin_states = {
-                'pin1': False, 'pin2': True, 'pin3': False, 'pin4': False, 'pin5': False
+                'pin1': False, 'pin2': True, 'pin3': False, 'pin4': False, 'pin5': False,
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
@@ -138,7 +138,7 @@ def process_sequence(sequence):
         elif char in Row_2_pin_0:
             binary_input = Row_2_pin_0[char]
             pin_states = {
-                'pin1': False, 'pin2': False, 'pin3': True, 'pin4': False, 'pin5': False
+                'pin1': False, 'pin2': False, 'pin3': True, 'pin4': False, 'pin5': False,
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
@@ -148,7 +148,7 @@ def process_sequence(sequence):
         elif char in Row_2_pin_1:
             binary_input = Row_2_pin_1[char]
             pin_states = {
-                'pin1': False, 'pin2': False, 'pin3': False, 'pin4': True, 'pin5': False
+                'pin1': False, 'pin2': False, 'pin3': False, 'pin4': True, 'pin5': False,
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
@@ -156,9 +156,9 @@ def process_sequence(sequence):
             send_command(pin_states)
             time.sleep(0.2)
         elif char in Row_3_pin_0:
-            binary_input = Row_2_pin_1[char]
+            binary_input = Row_3_pin_0[char]  # ✅ Fixed incorrect dictionary reference
             pin_states = {
-                'pin1': False, 'pin2': False, 'pin3': False, 'pin4': False, 'pin5': True
+                'pin1': False, 'pin2': False, 'pin3': False, 'pin4': False, 'pin5': True,
                 'bin0': binary_input[2] == '1',
                 'bin1': binary_input[1] == '1',
                 'bin2': binary_input[0] == '1'
