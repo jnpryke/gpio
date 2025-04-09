@@ -3,11 +3,11 @@ from flask import Flask
 # (Import your gpio_server and Flask logic)
 
 def run_flask():
-    from flask_app import app  # Assuming you saved your Flask app in flask_app.py
+    from toggle_html.py import app  # Assuming you saved your Flask app in flask_app.py
     app.run(host='0.0.0.0', port=5000)
 
 def run_gpio_server():
-    from gpio_server import main  # Assuming you saved the GPIO server in gpio_server.py
+    from toggle_pins.py import main  # Assuming you saved the GPIO server in gpio_server.py
     main()
 
 if __name__ == "__main__":
