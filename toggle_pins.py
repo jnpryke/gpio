@@ -20,12 +20,14 @@ def setup_gpio():
     Row_0_pin_5.request(consumer='gpio_control', type=gpiod.LINE_REQ_DIR_OUT)
     Row_1_pin_4.request(consumer='gpio_control', type=gpiod.LINE_REQ_DIR_OUT)
     Row_2_pin_9.request(consumer='gpio_control', type=gpiod.LINE_REQ_DIR_OUT)
+    Row_2_pin_87.request(consumer='gpio_control', type=gpiod.LINE_REQ_DIR_OUT)
+    Row_2_pin_88.request(consumer='gpio_control', type=gpiod.LINE_REQ_DIR_OUT)
 
     input_0.request(consumer='gpio_control', type=gpiod.LINE_REQ_DIR_OUT)
     input_1.request(consumer='gpio_control', type=gpiod.LINE_REQ_DIR_OUT)
     input_2.request(consumer='gpio_control', type=gpiod.LINE_REQ_DIR_OUT)
 
-    return Row_0_pin_5, Row_1_pin_4, Row_2_pin_9, Row_2_pin_87, input_0, input_1, input_2
+    return Row_0_pin_5, Row_1_pin_4, Row_2_pin_9, Row_2_pin_87, Row_2_pin_88, input_0, input_1, input_2
 
 def set_default_state(lines):
     Row_0_pin_5, Row_1_pin_4, Row_2_pin_9, Row_2_pin_87, Row_2_pin_88, input_0, input_1, input_2 = lines
